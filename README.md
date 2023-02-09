@@ -2,9 +2,9 @@
 
 ## Version Project
 
-Version: 1.0
-PHP: 8.2.0
-Laravel: 9.48.0
+- Version: 1.0.1
+- PHP: 8.2.0
+- Laravel: 9.48.0
 
 ## Project Laravel ICEITech
 
@@ -29,13 +29,13 @@ APP_ENV=production
 APP_DEBUG=false
 
 DB_DATABASE=<basedatos>
-DB_USERNAME=<nmbreusuario>
+DB_USERNAME=<nombreusuario>
 DB_PASSWORD=<contraseña>
 
 Actualizar el archivo index.php
 
-require __DIR__.'/../../subdominio/vendor/autoload.php';
-$app = require_once __DIR__.'/../../subdominio/bootstrap/app.php';
+    require __DIR__.'/../../subdominio/vendor/autoload.php';
+    $app = require_once __DIR__.'/../../subdominio/bootstrap/app.php';
 
 En la terminal ingresar a la carpeta del subdominio y ejecutar los comandos:
 
@@ -44,3 +44,9 @@ En la terminal ingresar a la carpeta del subdominio y ejecutar los comandos:
 - php artisan storage:link
 - php artisan migrate
 - php artisan passport:install
+
+## Factory and Seeder
+
+Para sembrar datos con las fábricas, ejecutar el comando:
+
+- php artisan db:seed DatabaseSeeder
