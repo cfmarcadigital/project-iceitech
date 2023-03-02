@@ -19,6 +19,7 @@ class AuthController extends BaseController
             'name' => 'required|min:4',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
+            'role_id' => 'required|min:1',
         ]);
 
         if($validator->fails()){
@@ -39,6 +40,8 @@ class AuthController extends BaseController
             );
         }
  
+        $this->authorize('create-delete-users');
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -94,5 +97,17 @@ class AuthController extends BaseController
                 401
             );
         }
-    }   
+    }
+
+    /**
+     *Logout
+     */
+    public function logout (Request $request) {
+        $token = auth()->user()->token();
+        $token->revoke();
+        return $this->sendResponse(
+            '',
+            'La sesión fue finalizada.'
+        );
+    }
 }

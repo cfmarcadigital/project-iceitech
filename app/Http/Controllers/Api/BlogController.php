@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\BaseController as BaseController;
-use App\Http\Resources\Video as VideoResource;
-use App\Models\Video;
+use App\Http\Resources\Blog as BlogResource;
+use App\Models\Blog;
 use Illuminate\Http\Request;
 use Validator;
 
-class VideoController extends BaseController
+class BlogController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -17,19 +17,19 @@ class VideoController extends BaseController
      */
     public function index()
     {
-        $videos = Video::all();
+        $blogs = Blog::all();
 
-        if (sizeof($videos) == 0) {
+        if (sizeof($blogs) == 0) {
             return $this->sendError(
                 $this->noRecords(),
-                'No existen videos registrados.',
+                'No existen blogs registrados.',
                 901
             );
         }
 
         return $this->sendResponse(
-            VideoResource::collection($videos), 
-            'Se encontraron registrados '.sizeof($videos).' videos.'
+            BlogResource::collection($blogs), 
+            'Se encontraron registrados '.sizeof($blogs).' blogs.'
         );
     }
 
@@ -54,10 +54,10 @@ class VideoController extends BaseController
         $data = $request->all();
 
         $validator = Validator::make($data, [
-            'title' => 'required|min:3',
+            /*'title' => 'required|min:3',
             'description' => 'required',
             'url' => 'required|unique:videos|min:10',
-            'user_id' => 'required',
+            'user_id' => 'required',*/
         ]);
 
         if($validator->fails()){
@@ -68,47 +68,47 @@ class VideoController extends BaseController
             );       
         }
 
-        $this->authorize('create-delete');
+        $this->authorize('create-delete-videos');
 
-        $video = Video::create($data);
+        $blog = Blog::create($data);
 
         return $this->sendResponse(
-            new VideoResource($video), 
-            'El video fue creado.'
+            new BlogResource($blog), 
+            'El blog fue creado.'
         );
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Video  $video
+     * @param  \App\Models\Blog  $blog
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $video = Video::find($id);
+        $blog = Blog::find($id);
 
-        if (is_null($video)) {
+        if (is_null($blog)) {
             return $this->sendError(
                 $this->noRecords(),
-                'Video no encontrado.',
+                'Blog no encontrado.',
                 902
             );
         }
 
         return $this->sendResponse(
-            new VideoResource($video),
-            'El video fue encontrado.'
+            new BlogResource($blog),
+            'El blog fue encontrado.'
         );
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Video  $video
+     * @param  \App\Models\Blog  $blog
      * @return \Illuminate\Http\Response
      */
-    public function edit(Video $video)
+    public function edit(Blog $blog)
     {
         //
     }
@@ -117,17 +117,17 @@ class VideoController extends BaseController
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Video  $video
+     * @param  \App\Models\Blog  $blog
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Video $video)
+    public function update(Request $request, Blog $blog)
     {
         $data = $request->all();
 
         $validator = Validator::make($data, [
             'title' => 'required|min:3',
-            'description' => 'required',
-            'url' => 'required|min:10',
+            'body' => 'required',
+            'image' => 'required',
             'user_id' => 'required',
         ]);
 
@@ -139,46 +139,46 @@ class VideoController extends BaseController
             );       
         }
 
-        $video->title = $data['title'];
-        $video->description = $data['description'];
-        $video->url = $data['url'];
-        $video->user_id = $data['user_id'];
+        $blog->title = $data['title'];
+        $blog->body = $data['body'];
+        $blog->image = $data['image'];
+        $blog->user_id = $data['user_id'];
         
         $this->authorize('edit');
 
-        $video->save();
+        $blog->save();
 
         return $this->sendResponse(
-            new VideoResource($video), 
-            'El video fue actualizado.'
+            new BlogResource($blog), 
+            'El blog fue actualizado.'
         );
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Video  $video
+     * @param  \App\Models\Blog  $blog
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $video = Video::find($id);
+        $blog = Blog::find($id);
 
-        if (is_null($video)) {
+        if (is_null($blog)) {
             return $this->sendError(
                 $this->noRecords(),
-                'Video no encontrado.',
+                'Blog no encontrado.',
                 902
             );
         }
         
         $this->authorize('create-delete');
-
-        $video->delete();
+        
+        $blog->delete();
 
         return $this->sendResponse(
-            new VideoResource($video),
-            'El video fue eliminado.'
+            new BlogResource($blog),
+            'El blog fue eliminado.'
         );
     }
 }

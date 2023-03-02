@@ -17,10 +17,10 @@ class VideoFactory extends Factory
     public function definition()
     {
         return [
-            'title' => 'Instalacion de Laravel',
-            'description' => 'Videotutoriales de Laravel',
+            'title' => 'Introducción Fullstack',
+            'description' => 'Clase de introducción al curso de desarrollo de software profesional FullStack impartido en ICEI TECH SRL',
             'url' => 'https://youtu.be/hGMQGC46xyE',
-            'author' => 'Carlos Marca'
+            'user_id' => 1
         ];
     }
 }

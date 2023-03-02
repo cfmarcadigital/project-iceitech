@@ -6,6 +6,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Categorize;
 use App\Models\Category;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\Video;
 
@@ -18,10 +19,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        Role::factory()->create();
         User::factory()->create();
         Category::factory()->create();
         Video::factory()->create();
-        Categorize::factory()->create();
+        //Categorize::factory()->create();
 
         /*User::factory()->create([
             'name' => 'Pepito Perez',

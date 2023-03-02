@@ -17,8 +17,8 @@ class CategoryFactory extends Factory
     public function definition()
     {
         return [
-            'name' => 'Laravel',
-            'description' => 'Videotutoriales de Laravel'
+            'name' => 'Programación y Desarrollo',
+            'description' => 'En la actualidad la programación es algo muy importante que permite que un sistema o software pueda ejecutarse. La programación informática es quién hace posible crear aplicaciones web, móviles y de escritorio. Para poder desarrollar un sistema se necesita conocer un lenguaje de programación.'
         ];
     }
 }
