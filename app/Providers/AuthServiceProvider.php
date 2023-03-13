@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Blog;
 use App\Models\User;
 use App\Models\Video;
 use Illuminate\Support\Facades\Gate;
@@ -27,21 +28,28 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('create-delete-users', function(User $user){
+        /*Gate::define('create-delete-users', function(User $user){
+            if($user->role_id === 1)
+                return true;
+        });*/
+
+        Gate::define('create-delete', function(User $user){
             if($user->role_id === 1)
                 return true;
         });
 
-        Gate::define('create-delete-videos', function(User $user){
+        Gate::define('edit-video', function(User $user, Video $video){
             if($user->role_id === 1)
                 return true;
-        });
-
-        Gate::define('edit-videos', function(User $user, Video $video){
-            if($user->role_id === 1)
-                return true;
-            else
+            else 
                 return ($user->id === $video->user_id);
+        });
+
+        Gate::define('edit-blog', function(User $user, Blog $blog){
+            if($user->role_id === 1)
+                return true;
+            else 
+                return ($user->id === $blog->user_id);
         });
     }
 }

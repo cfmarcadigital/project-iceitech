@@ -18,7 +18,7 @@ class Blog extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'body' => $this->body,
-            'image' => $this->image,
+            'image' => $this->image->path,
             'author' => $this->user->name,
             'publication_date' => $this->created_at->format('d-m-Y')
         ];

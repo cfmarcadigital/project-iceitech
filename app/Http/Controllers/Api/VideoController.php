@@ -144,7 +144,7 @@ class VideoController extends BaseController
         $video->url = $data['url'];
         $video->user_id = $data['user_id'];
         
-        $this->authorize('edit');
+        $this->authorize('edit-video');
 
         $video->save();
 

@@ -40,12 +40,13 @@ class AuthController extends BaseController
             );
         }
  
-        $this->authorize('create-delete-users');
+        //$this->authorize('create-delete-users');
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => bcrypt($request->password)
+            'password' => bcrypt($request->password),
+            'role_id' => $request->role_id
         ]);
        
         $token = $user->createToken('ProjectICEITech')->accessToken;

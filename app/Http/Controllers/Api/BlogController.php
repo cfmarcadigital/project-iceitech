@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\BaseController as BaseController;
+use App\Http\Controllers\Api\FileUploadController;
 use App\Http\Resources\Blog as BlogResource;
 use App\Models\Blog;
+use App\Models\File;
 use Illuminate\Http\Request;
+use Storage;
 use Validator;
 
 class BlogController extends BaseController
@@ -17,7 +20,7 @@ class BlogController extends BaseController
      */
     public function index()
     {
-        $blogs = Blog::all();
+        $blogs = Blog::all();        
 
         if (sizeof($blogs) == 0) {
             return $this->sendError(
@@ -25,7 +28,7 @@ class BlogController extends BaseController
                 'No existen blogs registrados.',
                 901
             );
-        }
+        }        
 
         return $this->sendResponse(
             BlogResource::collection($blogs), 
@@ -54,10 +57,10 @@ class BlogController extends BaseController
         $data = $request->all();
 
         $validator = Validator::make($data, [
-            /*'title' => 'required|min:3',
-            'description' => 'required',
-            'url' => 'required|unique:videos|min:10',
-            'user_id' => 'required',*/
+            'title' => 'required|min:3',
+            'body' => 'required',
+            'image' => 'required|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'user_id' => 'required|numeric',
         ]);
 
         if($validator->fails()){
@@ -68,9 +71,22 @@ class BlogController extends BaseController
             );       
         }
 
-        $this->authorize('create-delete-videos');
+        $this->authorize('create-delete');        
 
-        $blog = Blog::create($data);
+        if ($file = $request->file('image')) {
+            $path = $file->store('public/images');
+            $name = $file->getClientOriginalName();
+  
+            $image = new File();
+            $image->name = $name;
+            $image->path = $path;
+            $image->save();
+        }
+
+        if(asset($image->id)){
+            $data['image_id'] = $image->id;
+            $blog = Blog::create($data);
+        }
 
         return $this->sendResponse(
             new BlogResource($blog), 
@@ -137,14 +153,27 @@ class BlogController extends BaseController
                 'Error de validacion.', 
                 900
             );       
+        }        
+
+        $image = File::find($blog['image_id']);
+
+        if ($file = $request->file('image')) {
+            Storage::disk()->delete($image->path);
+            $path = $file->store('public/images');
+            $name = $file->getClientOriginalName();
+  
+            $image->name = $name;
+            $image->path = $path;
+            $image->save();
         }
 
-        $blog->title = $data['title'];
-        $blog->body = $data['body'];
-        $blog->image = $data['image'];
-        $blog->user_id = $data['user_id'];
+        if(asset($image->image_id)){
+            $blog->title = $data['title'];
+            $blog->body = $data['body'];
+            $blog->user_id = $data['user_id'];
+        }
         
-        $this->authorize('edit');
+        //$this->authorize('edit-blog');
 
         $blog->save();
 
@@ -172,8 +201,12 @@ class BlogController extends BaseController
             );
         }
         
+        $image = $blog->image;        
+
         $this->authorize('create-delete');
         
+        Storage::disk()->delete($image->path);
+        $image->delete();
         $blog->delete();
 
         return $this->sendResponse(

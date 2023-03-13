@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\File;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,7 +14,7 @@ class Blog extends Model
     protected $fillable = [
         'title',
         'body',
-        'image',
+        'image_id',
         'user_id',
     ];
 
@@ -23,5 +25,10 @@ class Blog extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function image()
+    {
+        return $this->belongsTo(File::class);
     }
 }

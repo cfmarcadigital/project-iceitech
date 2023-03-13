@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Video;
+use App\Models\Blog;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,8 +22,9 @@ class DatabaseSeeder extends Seeder
     {
         Role::factory()->create();
         User::factory()->create();
-        Category::factory()->create();
-        Video::factory()->create();
+        //Category::factory()->create();
+        //Video::factory()->create();
+        //Blog::factory()->create();
         //Categorize::factory()->create();
 
         /*User::factory()->create([
