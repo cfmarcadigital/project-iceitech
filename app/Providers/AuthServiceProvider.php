@@ -51,5 +51,12 @@ class AuthServiceProvider extends ServiceProvider
             else 
                 return ($user->id === $blog->user_id);
         });
+
+        Gate::define('edit', function(User $user){
+            if($user->role_id === 1)
+                return true;
+            else 
+                return false;
+        });
     }
 }

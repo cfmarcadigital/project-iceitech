@@ -14,16 +14,14 @@ class Teacher extends JsonResource
      */
     public function toArray($request)
     {
-        $categories = CategoryResource::collection($this->categories);
-
         return [
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
+            'profession' => $this->profession,
             'description' => $this->description,
             'github' => $this->github,
-            'author' => $this->linkedin,
-            'categories' => $categories
+            'linkedin' => $this->linkedin,        
         ];
     }
 }

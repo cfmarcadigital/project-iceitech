@@ -5,8 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\BlogController;
+use App\Http\Controllers\Api\TeacherController;
 use App\Http\Controllers\Api\VideoController;
-use App\Http\Controllers\Api\FileUploadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,13 +20,12 @@ use App\Http\Controllers\Api\FileUploadController;
 */
 
 Route::middleware('auth:api')->group(function () {
-    Route::resource('categories', CategoryController::class);
-    Route::resource('videos', VideoController::class);
+    //Route::resource('categories', CategoryController::class);
     Route::resource('blogs', BlogController::class);
-    Route::post('uploadImage', [FileUploadController::class, 'uploadImage']);
+    Route::resource('teachers', TeacherController::class);
+    Route::resource('videos', VideoController::class);
 });
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout']);
-//Route::post('uploadImage', [FileUploadController::class, 'uploadImage']);
