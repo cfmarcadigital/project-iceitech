@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\BaseController as BaseController;
 use App\Http\Resources\Video as VideoResource;
+use App\Models\User;
 use App\Models\Video;
 use Illuminate\Http\Request;
 use Validator;
@@ -68,7 +69,25 @@ class VideoController extends BaseController
             );       
         }
 
+        $user = User::find($data['user_id']);        
+
+        if($user == null){
+            return $this->sendError(
+                $this->noUsers(),
+                'El usuario no fue encontrado.', 
+                901
+            );       
+        }
+
         $this->authorize('create-delete');
+
+        /*if($this->authorize('create-delete')){
+            return $this->sendError(
+                $this->noPermissions(),
+                'El usuario no tiene permisos.', 
+                902
+            ); 
+        }*/
 
         $video = Video::create($data);
 
@@ -139,12 +158,21 @@ class VideoController extends BaseController
             );       
         }
 
+        if($video['id'] == null){
+            return $this->sendError(
+                $this->noRecords(),
+                'El video no fue encontrado.', 
+                901
+            );       
+        }
+
         $video->title = $data['title'];
         $video->description = $data['description'];
         $video->url = $data['url'];
-        $video->user_id = $data['user_id'];
+        if(isset($data['user_id']))
+            $video->user_id = $data['user_id'];
         
-        $this->authorize('edit-video');
+        $this->authorize('edit');
 
         $video->save();
 

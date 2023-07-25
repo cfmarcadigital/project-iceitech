@@ -22,7 +22,10 @@ return new class extends Migration
             $table->string('requirements');
             $table->string('modality');
             $table->string('schedules');
-            $table->string('image');
+            $table->unsignedBigInteger('category_id');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->unsignedBigInteger('image_id');
+            $table->foreign('image_id')->references('id')->on('files')->onDelete('cascade');
             $table->timestamps();
         });
     }

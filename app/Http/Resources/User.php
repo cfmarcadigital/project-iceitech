@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class Teacher extends JsonResource
+class User extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,10 +18,7 @@ class Teacher extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'profession' => $this->profession,
-            'description' => $this->description,
-            'github' => $this->github,
-            'linkedin' => $this->linkedin,        
+            'role' => $this->role->name,
         ];
     }
 }

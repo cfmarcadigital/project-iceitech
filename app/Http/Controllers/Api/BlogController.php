@@ -74,7 +74,7 @@ class BlogController extends BaseController
         $this->authorize('create-delete');        
 
         if ($file = $request->file('image')) {
-            $path = $file->store('public/images');
+            $path = $file->store('images');
             $name = $file->getClientOriginalName();
   
             $image = new File();
@@ -144,7 +144,7 @@ class BlogController extends BaseController
             'title' => 'required|min:3',
             'body' => 'required',
             'image' => 'required',
-            'user_id' => 'required',
+            //'user_id' => 'required',
         ]);
 
         if($validator->fails()){
@@ -159,7 +159,7 @@ class BlogController extends BaseController
 
         if ($file = $request->file('image')) {
             Storage::disk()->delete($image->path);
-            $path = $file->store('public/images');
+            $path = $file->store('images');
             $name = $file->getClientOriginalName();
   
             $image->name = $name;
@@ -170,10 +170,11 @@ class BlogController extends BaseController
         if(asset($image->image_id)){
             $blog->title = $data['title'];
             $blog->body = $data['body'];
-            $blog->user_id = $data['user_id'];
+            if(isset($data['user_id']))
+                $blog->user_id = $data['user_id'];
         }
         
-        //$this->authorize('edit-blog');
+        $this->authorize('edit');
 
         $blog->save();
 

@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\BaseController as BaseController;
-use App\Http\Resources\Teacher as TeacherResource;
-use App\Models\Teacher;
+use App\Http\Resources\Module as ModuleResource;
+use App\Models\Module;
 use Illuminate\Http\Request;
 use Validator;
 
-class TeacherController extends BaseController
+class ModuleController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -17,19 +17,19 @@ class TeacherController extends BaseController
      */
     public function index()
     {
-        $teachers = Teacher::all();
+        $modules = Module::all();        
 
-        if (sizeof($teachers) == 0) {
+        if (sizeof($modules) == 0) {
             return $this->sendError(
                 $this->noRecords(),
-                'No existen docentes registrados.',
+                'No existen módulos registrados.',
                 901
             );
-        }
+        }        
 
         return $this->sendResponse(
-            TeacherResource::collection($teachers), 
-            'Se encontraron registrados '.sizeof($teachers).' docentes.'
+            ModuleResource::collection($modules), 
+            'Se encontraron registrados '.sizeof($modules).' módulos.'
         );
     }
 
@@ -54,12 +54,10 @@ class TeacherController extends BaseController
         $data = $request->all();
 
         $validator = Validator::make($data, [
-            'name' => 'required|min:10',
-            'email' => 'required|email|unique:teachers',
-            'profession' => 'required',
+            'name' => 'required|min:3',
+            'content' => 'required',
             'description' => 'required',
-            'github' => 'required|unique:teachers|min:10',
-            'linkedin' => 'required|unique:teachers|min:10',
+            'course_id' => 'required|numeric',
         ]);
 
         if($validator->fails()){
@@ -70,47 +68,47 @@ class TeacherController extends BaseController
             );       
         }
 
-        $this->authorize('create-delete');
+        $this->authorize('create-delete');        
 
-        $teacher = Teacher::create($data);
+        $module = Module::create($data);
 
         return $this->sendResponse(
-            new TeacherResource($teacher), 
-            'El docente fue creado.'
+            new ModuleResource($module), 
+            'El módulo fue creado.'
         );
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Teacher  $teacher
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $teacher = Teacher::find($id);
+        $module = Module::find($id);
 
-        if (is_null($teacher)) {
+        if (is_null($module)) {
             return $this->sendError(
                 $this->noRecords(),
-                'Docente no encontrado.',
+                'Módulo no encontrado.',
                 902
             );
         }
 
         return $this->sendResponse(
-            new TeacherResource($teacher),
-            'El docente fue encontrado.'
+            new ModuleResource($module),
+            'El módulo fue encontrado.'
         );
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Teacher  $teacher
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Teacher $teacher)
+    public function edit($id)
     {
         //
     }
@@ -119,20 +117,18 @@ class TeacherController extends BaseController
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Teacher  $teacher
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Teacher $teacher)
+    public function update(Request $request, Module $module)
     {
         $data = $request->all();
 
         $validator = Validator::make($data, [
-            'name' => 'required|min:10',
-            'email' => 'required|email',
-            'profession' => 'required',
+            'name' => 'required|min:3',
+            'content' => 'required',
             'description' => 'required',
-            'github' => 'required|min:10',
-            'linkedin' => 'required|min:10',
+            //'course_id' => 'required',
         ]);
 
         if($validator->fails()){
@@ -143,48 +139,47 @@ class TeacherController extends BaseController
             );       
         }
 
-        $teacher->name = $data['name'];
-        $teacher->email = $data['email'];
-        $teacher->profession = $data['profession'];
-        $teacher->description = $data['description'];
-        $teacher->github = $data['github'];
-        $teacher->linkedin = $data['linkedin'];
+        $module->name = $data['name'];
+        $module->content = $data['content'];
+        $module->description = $data['description'];        
+        if(isset($data['course_id']))
+            $module->course_id = $data['course_id'];
         
         $this->authorize('edit');
 
-        $teacher->save();
+        $module->save();
 
         return $this->sendResponse(
-            new TeacherResource($teacher), 
-            'El docente fue actualizado.'
+            new ModuleResource($module), 
+            'El módulo fue actualizado.'
         );
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Teacher  $teacher
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $teacher = Teacher::find($id);
+        $module = Module::find($id);
 
-        if (is_null($teacher)) {
+        if (is_null($module)) {
             return $this->sendError(
                 $this->noRecords(),
-                'Docente no encontrado.',
+                'Módulo no encontrado.',
                 902
             );
         }
         
         $this->authorize('create-delete');
-
-        $teacher->delete();
+                
+        $module->delete();
 
         return $this->sendResponse(
-            new TeacherResource($teacher),
-            'El docente fue eliminado.'
+            new ModuleResource($module),
+            'El módulo fue eliminado.'
         );
     }
 }

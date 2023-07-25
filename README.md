@@ -14,8 +14,8 @@ Se implementó el backend con API's para el consumo desde el frontend.
 
 Se implementó el panel administrativo para el control de usuarios, cursos, docentes, etc.
 
-- [Site Developer](http://icei.tech/backendtest).
-- [Site Production](http://icei.tech/backend).
+- [Site Developer](http://test.icei.tech/backend).
+- [Site Production](http://www.icei.tech/backend).
 
 ## Deploy Project
 
@@ -47,6 +47,8 @@ En la terminal ingresar a la carpeta del subdominio y ejecutar los comandos:
 
 ## Factory and Seeder
 
-Para sembrar datos con las fábricas, ejecutar el comando:
+Para sembrar datos con las fábricas, ejecutar los comandos:
 
+- php artisan db:seed RolesSeeder
+- php artisan db:seed UsersSeeder
 - php artisan db:seed DatabaseSeeder

@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\Video as VideoResource;
 
 class Category extends JsonResource
 {
@@ -15,13 +14,10 @@ class Category extends JsonResource
      */
     public function toArray($request)
     {
-        //$videos = VideoResource::collection($this->videos);
-
         return [
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            //'videos' => $videos
         ];
     }
 }

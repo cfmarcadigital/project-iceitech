@@ -32,4 +32,12 @@ class BaseController extends Controller
     public function noRecords(){
         return ['data' => ['No records.']];
     }
+
+    public function noUsers(){
+        return ['data' => ['Unregistered user.']];
+    }
+
+    public function noPermissions(){
+        return ['data' => ['No permisisions.']];
+    }
 }

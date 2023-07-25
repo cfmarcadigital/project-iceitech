@@ -51,8 +51,9 @@ class AuthController extends BaseController
        
         $token = $user->createToken('ProjectICEITech')->accessToken;
         $user = [
-            'name' => $request->name,
-            'email' => $request->email,
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
             'token' => $token
         ];
         return $this->sendResponse(
@@ -82,6 +83,7 @@ class AuthController extends BaseController
         if (auth()->attempt($request->all())) {
             $token = auth()->user()->createToken('ProjectICEITech')->accessToken;
             $user = [
+                'id' => auth()->user()->id,
                 'name' => auth()->user()->name,
                 'email' => auth()->user()->email,
                 'token' => $token

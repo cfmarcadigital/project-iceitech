@@ -28,35 +28,37 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        /*Gate::define('create-delete-users', function(User $user){
-            if($user->role_id === 1)
-                return true;
-        });*/
-
         Gate::define('create-delete', function(User $user){
+            if($user->role->name === 'Super Administrador')
+                return true;
+            else
+                return false;
+        });
+
+        Gate::define('edit', function(User $user){
+            if($user->role->name === 'Super Administrador')
+                return true;
+            else 
+                return false;
+        });
+
+        /*Gate::define('create-delete-users', function(User $user){
             if($user->role_id === 1)
                 return true;
         });
 
         Gate::define('edit-video', function(User $user, Video $video){
-            if($user->role_id === 1)
+            if($user->role->name === 'Super Administrador')
                 return true;
             else 
                 return ($user->id === $video->user_id);
         });
 
         Gate::define('edit-blog', function(User $user, Blog $blog){
-            if($user->role_id === 1)
+            if($user->role->name === 'Super Administrador')
                 return true;
             else 
                 return ($user->id === $blog->user_id);
-        });
-
-        Gate::define('edit', function(User $user){
-            if($user->role_id === 1)
-                return true;
-            else 
-                return false;
-        });
+        });*/        
     }
 }

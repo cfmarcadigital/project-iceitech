@@ -13,14 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('teachers', function (Blueprint $table) {
+        Schema::create('employees', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('type');
             $table->string('name');
             $table->string('email');
             $table->string('profession');
             $table->text('description');
-            $table->string('github');
-            $table->string('linkedin');           
+            $table->string('github')->nullable();
+            $table->string('linkedin');
+            $table->unsignedBigInteger('image_id');
+            $table->foreign('image_id')->references('id')->on('files')->onDelete('cascade');
             $table->timestamps();
         });
     }
